@@ -1,0 +1,80 @@
+### User Sign up end point
+# Send Request
+POST http://localhost:4000/v1/user
+Content-Type: application/json
+
+{
+    "name":"Pratham Verma",
+    "company":"Google",
+    "address:"Mumbai",
+    "phone":"565215451",
+    "email":"prathamverma8880@gmail.com",
+    "password":"secret123"
+}
+
+## User sign in endpoint
+POST http://localhost:4000/v1/user/login
+Content-Type: application/json
+
+{
+    "email":"prathamverma8880@gmail.com",
+    "password":"secret123"
+}
+
+## Profile endpoint
+GET http://localhost:4000/v1/user
+
+## Tokens routers
+
+## Get Refreshed Tokens
+GET http://loclashost:4000/v1/tokens
+
+## Password reset request end point
+POST http://localhost:4000/v1/user/reset-password
+Content-Type: application/json
+{
+    "email":"e2@e.com"
+}
+
+## Update new password end point
+PATCH http://localhost:4000/v1/user/reset-password
+Content-Type: application/json
+{
+    "email":"e2@e.com",
+    "pin":"645698",
+    "newPassword":"Password"
+}
+
+## password reset request endpoints
+POST http://localhost:3001/v1/user/reset-password
+Content-Type: application/json
+
+{
+    "email":"prathamverma8880@gmail.com"
+}
+
+## Update new password endpoint
+
+PATCH http://localhost:3001/v1/user/reset-password
+Content-Type: application/json
+
+{
+    "email":"prathamverma8880@gmail.com",
+    "pin":218630,
+    "newPassword":"password"
+}
+
+## User Logout endpoint
+
+DELETE http://localhost:3001/v1/user/logout
+
+## Update new password endpoint
+
+PATCH http://localhost:3001/v1/user/reset-password
+Content-Type: application/json
+
+{
+    "email":"prathamverma8880@gmail.com",
+    "pin":218630,
+    "newPassword":"password"
+}

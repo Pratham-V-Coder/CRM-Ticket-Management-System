@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "subject": "Login issue",
+    "status": "Client response pending",
+    "openedDate": "2020-09-23"
+  },
+  {
+    "id": 2,
+    "subject": "Payment failed",
+    "status": "Client response pending",
+    "openedDate": "2020-09-23"
+  },
+  {
+    "id": 3,
+    "subject": "Dashboard not loading",
+    "status": "Client response pending",
+    "openedDate": "2020-09-23"
+  },
+  {
+    "id": 4,
+    "subject": "Password reset issue",
+    "status": "Client response pending",
+    "openedDate": "2020-09-23"
+  },
+  {
+    "id": 5,
+    "subject": "Email verification problem",
+    "status": "Client response pending",
+    "openedDate": "2020-09-23"
+  },
+  {
+    "id": 6,
+    "subject": "CRM slow performance",
+    "status": "Client response pending",
+    "openedDate": "2020-09-23"
+  },
+  {
+    "id": 7,
+    "subject": "Unable to update profile",
+    "status": "Client response pending",
+    "openedDate": "2020-09-23"
+  },
+  {
+    "id": 8,
+    "subject": "Invoice generation issue",
+    "status": "Client response pending",
+    "openedDate": "2020-09-23"
+  },
+  {
+    "id": 9,
+    "subject": "Role permission bug",
+    "status": "Client response pending",
+    "openedDate": "2020-09-23"
+  },
+  {
+    "id": 10,
+    "subject": "Customer data sync issue",
+    "status": "Client response pending",
+    "openedDate": "2020-09-23"
+  }
+]
