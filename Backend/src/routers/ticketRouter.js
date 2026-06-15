@@ -11,6 +11,7 @@ import {
   deleteTicket,
   deleteTicketAdmin,
 } from "../models/Ticket/ticketModel.js";
+import { TICKET_CATEGORIES } from "../models/Ticket/ticketSchema.js";
 import { userAuthorization } from "../middleware/authorization.js";
 import { adminAuthorization } from "../middleware/adminAuthorization.js";
 import {
@@ -29,11 +30,18 @@ router.post(
   userAuthorization,
   async (req, res) => {
     try {
-      const { subject, sender, message } = req.body;
+      const { subject, sender, message, category } = req.body;
       const clientId = req.userId;
+
+      // Validate category, fallback to "other" if missing/invalid
+      const finalCategory = TICKET_CATEGORIES.includes(category)
+        ? category
+        : "other";
+
       const ticketObj = {
         clientId,
         subject,
+        category: finalCategory,
         conversation: [{ sender, message }],
       };
       const result = await insertTicket(ticketObj);
@@ -146,10 +154,11 @@ router.delete("/:_id", userAuthorization, async (req, res) => {
 
 // ============ ADMIN ROUTES ============
 
-// Get all tickets — admin
+// Get all tickets — admin (optionally filtered by category via ?category=hardware)
 router.get("/admin/all", adminAuthorization, async (req, res) => {
   try {
-    const result = await getAllTickets();
+    const { category } = req.query;
+    const result = await getAllTickets(category);
     return res.json({ status: "success", result });
   } catch (error) {
     res.json({ status: "error", message: error.message });

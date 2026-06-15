@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { TICKET_CATEGORIES } from "../models/Ticket/ticketSchema.js";
 
 const email = Joi.string().email({
   minDomainSegments: 2,
@@ -37,6 +38,9 @@ const createNewTicketValidation = (req, res, next) => {
     sender: Joi.string().min(2).max(50),
     message: longStr,
     issueDate: dt,
+    category: Joi.string()
+      .valid(...TICKET_CATEGORIES)
+      .required(),
   });
   const value = schema.validate(req.body);
   if (value.error) {

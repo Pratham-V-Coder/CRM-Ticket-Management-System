@@ -75,79 +75,36 @@ const ManageEmployees = ({ onClose }) => {
     }
   };
 
+  const fields = [
+    { label: "Full Name *", name: "name", type: "text", required: true },
+    { label: "Email *", name: "email", type: "email", required: true },
+    { label: "Password *", name: "password", type: "password", required: true },
+    { label: "Company", name: "company", type: "text" },
+    { label: "Phone", name: "phone", type: "number" },
+    { label: "Address", name: "address", type: "text" },
+  ];
+
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.5)",
-        zIndex: 1000,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <div
-        style={{
-          background: "white",
-          borderRadius: "16px",
-          width: "100%",
-          maxWidth: "750px",
-          maxHeight: "90vh",
-          overflowY: "auto",
-          padding: "1.5rem",
-          position: "relative",
-        }}
-      >
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50">
+      <div className="relative w-full max-w-[750px] max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6">
         {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "1.25rem",
-          }}
-        >
-          <h2
-            style={{
-              margin: 0,
-              fontSize: "18px",
-              fontWeight: 700,
-              color: "#111827",
-            }}
-          >
+        <div className="mb-5 flex items-center justify-between">
+          <h2 className="m-0 text-lg font-bold text-gray-900">
             👥 Manage Employees
           </h2>
-          <div style={{ display: "flex", gap: "8px" }}>
+          <div className="flex gap-2">
             <button
               onClick={() => {
                 setShowForm(!showForm);
                 setMessage({ type: "", text: "" });
               }}
-              style={{
-                background: "#0e7490",
-                color: "white",
-                border: "none",
-                borderRadius: "8px",
-                padding: "8px 16px",
-                cursor: "pointer",
-                fontSize: "13px",
-                fontWeight: 500,
-              }}
+              className="rounded-lg bg-cyan-700 px-4 py-2 text-[13px] font-medium text-white cursor-pointer"
             >
               {showForm ? "Cancel" : "+ Add Employee"}
             </button>
             <button
               onClick={onClose}
-              style={{
-                background: "#f3f4f6",
-                color: "#374151",
-                border: "none",
-                borderRadius: "8px",
-                padding: "8px 14px",
-                cursor: "pointer",
-                fontSize: "16px",
-              }}
+              className="rounded-lg bg-gray-100 px-3.5 py-2 text-base text-gray-700 cursor-pointer"
             >
               ✕
             </button>
@@ -157,15 +114,11 @@ const ManageEmployees = ({ onClose }) => {
         {/* Message */}
         {message.text && (
           <div
-            style={{
-              padding: "10px 14px",
-              borderRadius: "8px",
-              marginBottom: "1rem",
-              fontSize: "13px",
-              fontWeight: 500,
-              background: message.type === "success" ? "#dcfce7" : "#fee2e2",
-              color: message.type === "success" ? "#15803d" : "#dc2626",
-            }}
+            className={`mb-4 rounded-lg px-3.5 py-2.5 text-[13px] font-medium ${
+              message.type === "success"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-600"
+            }`}
           >
             {message.text}
           </div>
@@ -175,64 +128,15 @@ const ManageEmployees = ({ onClose }) => {
         {showForm && (
           <form
             onSubmit={handleSubmit}
-            style={{
-              background: "#f9fafb",
-              border: "1px solid #e5e7eb",
-              borderRadius: "12px",
-              padding: "1.25rem",
-              marginBottom: "1.5rem",
-            }}
+            className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-5"
           >
-            <h3
-              style={{
-                margin: "0 0 1rem",
-                fontSize: "15px",
-                fontWeight: 600,
-                color: "#374151",
-              }}
-            >
+            <h3 className="m-0 mb-4 text-[15px] font-semibold text-gray-700">
               Naya Employee Add Karo
             </h3>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "12px",
-              }}
-            >
-              {[
-                {
-                  label: "Full Name *",
-                  name: "name",
-                  type: "text",
-                  required: true,
-                },
-                {
-                  label: "Email *",
-                  name: "email",
-                  type: "email",
-                  required: true,
-                },
-                {
-                  label: "Password *",
-                  name: "password",
-                  type: "password",
-                  required: true,
-                },
-                { label: "Company", name: "company", type: "text" },
-                { label: "Phone", name: "phone", type: "number" },
-                { label: "Address", name: "address", type: "text" },
-              ].map((field) => (
+            <div className="grid grid-cols-2 gap-3">
+              {fields.map((field) => (
                 <div key={field.name}>
-                  <label
-                    style={{
-                      fontSize: "12px",
-                      fontWeight: 500,
-                      color: "#374151",
-                      display: "block",
-                      marginBottom: "4px",
-                    }}
-                  >
+                  <label className="mb-1 block text-xs font-medium text-gray-700">
                     {field.label}
                   </label>
                   <input
@@ -241,68 +145,29 @@ const ManageEmployees = ({ onClose }) => {
                     value={form[field.name]}
                     onChange={handleChange}
                     required={field.required}
-                    style={{
-                      width: "100%",
-                      padding: "8px 10px",
-                      border: "1px solid #d1d5db",
-                      borderRadius: "8px",
-                      fontSize: "13px",
-                      outline: "none",
-                      boxSizing: "border-box",
-                    }}
+                    className="w-full rounded-lg border border-gray-300 px-2.5 py-2 text-[13px] text-gray-900 placeholder-gray-400 outline-none focus:border-cyan-600 focus:ring-1 focus:ring-cyan-600"
                   />
                 </div>
               ))}
               <div>
-                <label
-                  style={{
-                    fontSize: "12px",
-                    fontWeight: 500,
-                    color: "#374151",
-                    display: "block",
-                    marginBottom: "4px",
-                  }}
-                >
+                <label className="mb-1 block text-xs font-medium text-gray-700">
                   Role *
                 </label>
                 <select
                   name="role"
                   value={form.role}
                   onChange={handleChange}
-                  style={{
-                    width: "100%",
-                    padding: "8px 10px",
-                    border: "1px solid #d1d5db",
-                    borderRadius: "8px",
-                    fontSize: "13px",
-                    outline: "none",
-                    boxSizing: "border-box",
-                  }}
+                  className="w-full rounded-lg border border-gray-300 px-2.5 py-2 text-[13px] text-gray-900 outline-none focus:border-cyan-600 focus:ring-1 focus:ring-cyan-600"
                 >
                   <option value="employee">Employee</option>
                   <option value="viewer">Viewer</option>
                 </select>
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "1rem",
-              }}
-            >
+            <div className="mt-4 flex justify-end">
               <button
                 type="submit"
-                style={{
-                  background: "#0e7490",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  padding: "9px 24px",
-                  cursor: "pointer",
-                  fontSize: "13px",
-                  fontWeight: 600,
-                }}
+                className="rounded-lg bg-cyan-700 px-6 py-2.5 text-[13px] font-semibold text-white cursor-pointer"
               >
                 Create Employee
               </button>
@@ -312,93 +177,40 @@ const ManageEmployees = ({ onClose }) => {
 
         {/* Employees List */}
         <div>
-          <h3
-            style={{
-              fontSize: "14px",
-              fontWeight: 600,
-              color: "#374151",
-              marginBottom: "12px",
-            }}
-          >
+          <h3 className="mb-3 text-sm font-semibold text-gray-700">
             All Employees ({employees.length})
           </h3>
           {isLoading ? (
-            <p
-              style={{ textAlign: "center", color: "#9ca3af", padding: "2rem" }}
-            >
-              Loading...
-            </p>
+            <p className="py-8 text-center text-gray-400">Loading...</p>
           ) : employees.length === 0 ? (
-            <p
-              style={{ textAlign: "center", color: "#9ca3af", padding: "2rem" }}
-            >
+            <p className="py-8 text-center text-gray-400">
               Koi employee nahi mila
             </p>
           ) : (
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "8px" }}
-            >
+            <div className="flex flex-col gap-2">
               {employees.map((emp) => (
                 <div
                   key={emp._id}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "12px 14px",
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "10px",
-                    background: emp.isActive ? "white" : "#fef2f2",
-                  }}
+                  className={`flex items-center justify-between rounded-[10px] border border-gray-200 px-3.5 py-3 ${
+                    emp.isActive ? "bg-white" : "bg-red-50"
+                  }`}
                 >
                   <div>
-                    <p
-                      style={{
-                        margin: 0,
-                        fontWeight: 600,
-                        fontSize: "13px",
-                        color: "#111827",
-                      }}
-                    >
+                    <p className="m-0 text-[13px] font-semibold text-gray-900">
                       {emp.name}
                     </p>
-                    <p
-                      style={{
-                        margin: "2px 0 0",
-                        fontSize: "12px",
-                        color: "#6b7280",
-                      }}
-                    >
-                      {emp.email}
-                    </p>
-                    <span
-                      style={{
-                        fontSize: "11px",
-                        padding: "2px 8px",
-                        borderRadius: "20px",
-                        fontWeight: 500,
-                        marginTop: "4px",
-                        display: "inline-block",
-                        background: "#e0f2fe",
-                        color: "#0369a1",
-                      }}
-                    >
+                    <p className="mt-0.5 text-xs text-gray-500">{emp.email}</p>
+                    <span className="mt-1 inline-block rounded-full bg-sky-100 px-2 py-0.5 text-[11px] font-medium text-sky-700">
                       {emp.role}
                     </span>
                   </div>
                   <button
                     onClick={() => handleToggle(emp._id, emp.isActive)}
-                    style={{
-                      padding: "6px 14px",
-                      borderRadius: "8px",
-                      fontSize: "12px",
-                      fontWeight: 500,
-                      cursor: "pointer",
-                      border: "1.5px solid",
-                      borderColor: emp.isActive ? "#ef4444" : "#10b981",
-                      color: emp.isActive ? "#ef4444" : "#10b981",
-                      background: "white",
-                    }}
+                    className={`cursor-pointer rounded-lg border-[1.5px] bg-white px-3.5 py-1.5 text-xs font-medium ${
+                      emp.isActive
+                        ? "border-red-500 text-red-500"
+                        : "border-emerald-500 text-emerald-500"
+                    }`}
                   >
                     {emp.isActive ? "Block" : "Unblock"}
                   </button>

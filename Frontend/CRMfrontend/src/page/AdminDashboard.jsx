@@ -10,6 +10,38 @@ import {
 } from "../api/ticketApi";
 import ManageEmployees from "./ManageEmployee";
 
+// Category metadata for labels/icons
+const CATEGORY_META = {
+  hardware: { label: "Hardware", icon: "🖥️" },
+  software: { label: "Software", icon: "💾" },
+  network: { label: "Network", icon: "📡" },
+  application: { label: "Application/Access", icon: "🔐" },
+  account_hr: { label: "Account/HR", icon: "🧾" },
+  email: { label: "Email", icon: "📧" },
+  asset_request: { label: "Asset Request", icon: "📦" },
+  security: { label: "Security", icon: "🛡️" },
+  printer_scanner: { label: "Printer/Scanner", icon: "🖨️" },
+  server_database: { label: "Server/Database", icon: "🗄️" },
+  training_onboarding: { label: "Training/Onboarding", icon: "🎓" },
+  other: { label: "Other", icon: "❓" },
+};
+
+const CATEGORY_FILTER_OPTIONS = [
+  { value: "all", label: "All Categories" },
+  { value: "hardware", label: "Hardware" },
+  { value: "software", label: "Software" },
+  { value: "network", label: "Network" },
+  { value: "application", label: "Application/Access" },
+  { value: "account_hr", label: "Account/HR" },
+  { value: "email", label: "Email" },
+  { value: "asset_request", label: "Asset Request" },
+  { value: "security", label: "Security" },
+  { value: "printer_scanner", label: "Printer/Scanner" },
+  { value: "server_database", label: "Server/Database" },
+  { value: "training_onboarding", label: "Training/Onboarding" },
+  { value: "other", label: "Other" },
+];
+
 const AdminDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,6 +55,7 @@ const AdminDashboard = () => {
   const [reply, setReply] = useState("");
   const [replyMsg, setReplyMsg] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("all"); // ✅ new
   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
 
   useEffect(() => {
@@ -31,12 +64,12 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     loadTickets();
-  }, []);
+  }, [categoryFilter]); // ✅ reload when category filter changes
 
   const loadTickets = async () => {
     setIsLoading(true);
     try {
-      const result = await fetchAllTicketsAdmin();
+      const result = await fetchAllTicketsAdmin(categoryFilter); // ✅ pass category
       if (result.status === "success") {
         setTickets(result.result || []);
       }
@@ -278,9 +311,55 @@ const AdminDashboard = () => {
                 />
               </div>
 
+              {/* Category Filter Dropdown */}
+              <div style={{ marginBottom: "12px" }}>
+                <label
+                  style={{
+                    display: "block",
+                    fontSize: "11px",
+                    fontWeight: 500,
+                    color: "#6b7280",
+                    marginBottom: "4px",
+                  }}
+                >
+                  Filter by Category
+                </label>
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => {
+                    setCategoryFilter(e.target.value);
+                    setSelectedTicket(null);
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "8px 10px",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "8px",
+                    fontSize: "13px",
+                    outline: "none",
+                    boxSizing: "border-box",
+                    background: "white",
+                    color: "#111827",
+                  }}
+                >
+                  {CATEGORY_FILTER_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.value !== "all"
+                        ? `${CATEGORY_META[opt.value]?.icon || ""} ${opt.label}`
+                        : opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* Filter Tabs */}
               <div
-                style={{ display: "flex", gap: "8px", marginBottom: "12px" }}
+                style={{
+                  display: "flex",
+                  gap: "8px",
+                  marginBottom: "12px",
+                  flexWrap: "wrap",
+                }}
               >
                 {["All", "Open", "Closed", "Pending Operator response"].map(
                   (f) => (
@@ -326,84 +405,112 @@ const AdminDashboard = () => {
                   No tickets found
                 </p>
               ) : (
-                filteredTickets.map((ticket) => (
-                  <div
-                    key={ticket._id}
-                    onClick={() => handleSelectTicket(ticket._id)}
-                    style={{
-                      padding: "12px",
-                      borderRadius: "8px",
-                      marginBottom: "8px",
-                      cursor: "pointer",
-                      border:
-                        selectedTicket?._id === ticket._id
-                          ? "1.5px solid #0e7490"
-                          : "1px solid #e5e7eb",
-                      background:
-                        selectedTicket?._id === ticket._id
-                          ? "#f0fdff"
-                          : "white",
-                    }}
-                  >
+                filteredTickets.map((ticket) => {
+                  const catMeta =
+                    CATEGORY_META[ticket.category] || CATEGORY_META.other;
+                  return (
                     <div
+                      key={ticket._id}
+                      onClick={() => handleSelectTicket(ticket._id)}
                       style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
+                        padding: "12px",
+                        borderRadius: "8px",
+                        marginBottom: "8px",
+                        cursor: "pointer",
+                        border:
+                          selectedTicket?._id === ticket._id
+                            ? "1.5px solid #0e7490"
+                            : "1px solid #e5e7eb",
+                        background:
+                          selectedTicket?._id === ticket._id
+                            ? "#f0fdff"
+                            : "white",
                       }}
                     >
-                      <p
+                      <div
                         style={{
-                          margin: 0,
-                          fontWeight: 500,
-                          fontSize: "13px",
-                          color: "#111827",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
                         }}
                       >
-                        {ticket.subject}
-                      </p>
+                        <p
+                          style={{
+                            margin: 0,
+                            fontWeight: 500,
+                            fontSize: "13px",
+                            color: "#111827",
+                          }}
+                        >
+                          {ticket.subject}
+                        </p>
+                        <span
+                          style={{
+                            fontSize: "10px",
+                            padding: "2px 8px",
+                            borderRadius: "20px",
+                            fontWeight: 500,
+                            background:
+                              ticket.status === "Closed"
+                                ? "#dcfce7"
+                                : "#fef3c7",
+                            color:
+                              ticket.status === "Closed"
+                                ? "#15803d"
+                                : "#b45309",
+                          }}
+                        >
+                          {ticket.status === "Closed" ? "Closed" : "Pending"}
+                        </span>
+                      </div>
+
+                      {/* Category badge */}
                       <span
                         style={{
+                          display: "inline-block",
+                          marginTop: "4px",
                           fontSize: "10px",
                           padding: "2px 8px",
                           borderRadius: "20px",
                           fontWeight: 500,
-                          background:
-                            ticket.status === "Closed" ? "#dcfce7" : "#fef3c7",
-                          color:
-                            ticket.status === "Closed" ? "#15803d" : "#b45309",
+                          background: "#ede9fe",
+                          color: "#6d28d9",
                         }}
                       >
-                        {ticket.status === "Closed" ? "Closed" : "Pending"}
+                        {catMeta.icon} {catMeta.label}
                       </span>
+
+                      <p
+                        style={{
+                          margin: "3px 0 0",
+                          fontSize: "11px",
+                          color: "#0e7490",
+                          fontWeight: 500,
+                        }}
+                      >
+                        👤 {ticket.clientId?.name || "Unknown User"}
+                      </p>
+                      <p
+                        style={{
+                          margin: "2px 0 0",
+                          fontSize: "11px",
+                          color: "#9ca3af",
+                        }}
+                      >
+                        {ticket.openAt
+                          ? new Date(ticket.openAt).toLocaleDateString(
+                              "en-IN",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              },
+                            )
+                          : "N/A"}
+                      </p>
                     </div>
-                    <p
-                      style={{
-                        margin: "3px 0 0",
-                        fontSize: "11px",
-                        color: "#0e7490",
-                        fontWeight: 500,
-                      }}
-                    >
-                      👤 {ticket.clientId?.name || "Unknown User"}
-                    </p>
-                    <p
-                      style={{
-                        margin: "2px 0 0",
-                        fontSize: "11px",
-                        color: "#9ca3af",
-                      }}
-                    >
-                      {ticket.openAt
-                        ? new Date(ticket.openAt).toLocaleDateString("en-IN", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                          })
-                        : "N/A"}
-                    </p>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
 
@@ -438,6 +545,34 @@ const AdminDashboard = () => {
                     >
                       {selectedTicket.subject}
                     </h3>
+
+                    {/* Category badge in detail view */}
+                    <span
+                      style={{
+                        display: "inline-block",
+                        marginBottom: "6px",
+                        fontSize: "11px",
+                        padding: "2px 10px",
+                        borderRadius: "20px",
+                        fontWeight: 500,
+                        background: "#ede9fe",
+                        color: "#6d28d9",
+                      }}
+                    >
+                      {
+                        (
+                          CATEGORY_META[selectedTicket.category] ||
+                          CATEGORY_META.other
+                        ).icon
+                      }{" "}
+                      {
+                        (
+                          CATEGORY_META[selectedTicket.category] ||
+                          CATEGORY_META.other
+                        ).label
+                      }
+                    </span>
+
                     <div
                       style={{
                         display: "flex",

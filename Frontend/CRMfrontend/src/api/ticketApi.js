@@ -217,7 +217,8 @@ export const getSingleTicket = (_id) => {
 // ✅ Ye naye functions add karo file ke end mein
 
 // Admin — saare tickets fetch karo
-export const fetchAllTicketsAdmin = () => {
+// Admin — saare tickets fetch karo (optional category filter)
+export const fetchAllTicketsAdmin = (category) => {
   return new Promise(async (resolve, reject) => {
     try {
       const accessJWT =
@@ -225,7 +226,12 @@ export const fetchAllTicketsAdmin = () => {
         localStorage.getItem("accessJWT");
       if (!accessJWT) return reject("Token not found");
 
-      const res = await axios.get(ticketUrl + "/admin/all", {
+      const url =
+        category && category !== "all"
+          ? `${ticketUrl}/admin/all?category=${category}`
+          : `${ticketUrl}/admin/all`;
+
+      const res = await axios.get(url, {
         headers: { Authorization: `Bearer ${accessJWT}` },
       });
       resolve(res.data);

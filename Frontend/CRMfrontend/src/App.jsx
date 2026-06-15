@@ -13,6 +13,7 @@ import Footer from "./Component/Footer";
 import PrivateRoute from "./page/PrivateRoute";
 
 import Dashboad from "./page/Dashboad";
+import RaiseTicket from "./page/RaiseTicket";
 import AddTicket from "./page/AddTicket";
 import TicketListing from "./page/TicketListing";
 import TicketPage from "./page/TicketPage";
@@ -53,7 +54,31 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/raise-ticket",
+    element: (
+      <PrivateRoute roles={["employee"]}>
+        <Navbar />
+        <div className="pt-16">
+          <RaiseTicket />
+          <Footer />
+        </div>
+      </PrivateRoute>
+    ),
+  },
+  {
     path: "/addticket",
+    element: (
+      <PrivateRoute roles={["employee"]}>
+        <Navbar />
+        <div className="pt-16">
+          <AddTicket />
+          <Footer />
+        </div>
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/addticket/:category",
     element: (
       <PrivateRoute roles={["employee"]}>
         <Navbar />

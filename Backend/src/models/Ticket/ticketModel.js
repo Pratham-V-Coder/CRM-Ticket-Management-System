@@ -25,11 +25,12 @@ const getTickets = (clientId) => {
   });
 };
 
-const getAllTickets = () => {
+const getAllTickets = (category) => {
   return new Promise((resolve, reject) => {
     try {
-      TicketModel.find()
-        .populate("clientId", "name email") // ✅ Add kiya
+      const filter = category && category !== "all" ? { category } : {};
+      TicketModel.find(filter)
+        .populate("clientId", "name email")
         .then((data) => resolve(data))
         .catch((error) => reject(error));
     } catch (error) {
@@ -54,7 +55,7 @@ const getTicketByIdAdmin = (_id) => {
   return new Promise((resolve, reject) => {
     try {
       TicketModel.findOne({ _id })
-        .populate("clientId", "name email") // ✅ Add kiya
+        .populate("clientId", "name email")
         .then((data) => resolve(data))
         .catch((error) => reject(error));
     } catch (error) {
