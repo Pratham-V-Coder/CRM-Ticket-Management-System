@@ -19,6 +19,7 @@ import TicketListing from "./page/TicketListing";
 import TicketPage from "./page/TicketPage";
 
 import AdminDashboard from "./page/AdminDashboard";
+import AdminCategoryManager from "./Component/AdminCategoryManager"; // ✅ naya import
 
 import HelpSection from "./page/HelperSection";
 import CreateUser from "./page/CreateUser";
@@ -121,6 +122,19 @@ const router = createBrowserRouter([
         <Navbar />
         <div className="pt-16">
           <AdminDashboard />
+        </div>
+      </PrivateRoute>
+    ),
+  },
+
+  {
+    path: "/admin/categories", // ✅ naya route
+    element: (
+      <PrivateRoute isAdmin={true}>
+        <Navbar />
+        <div className="pt-16">
+          <AdminCategoryManager />
+          <Footer />
         </div>
       </PrivateRoute>
     ),

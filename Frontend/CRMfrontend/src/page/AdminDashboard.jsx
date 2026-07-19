@@ -255,6 +255,73 @@ const AdminDashboard = () => {
             </div>
           </div>
 
+          {/* STAT CARDS ke baad yeh add karo */}
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              marginBottom: "1.5rem",
+              flexWrap: "wrap",
+            }}
+          >
+            <button
+              onClick={() => navigate("/admin/categories")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 18px",
+                borderRadius: "10px",
+                fontSize: "13px",
+                fontWeight: 500,
+                cursor: "pointer",
+                border: "1.5px solid #0e7490",
+                background: "white",
+                color: "#0e7490",
+              }}
+            >
+              🗂️ Manage Categories
+            </button>
+
+            <button
+              onClick={() => navigate("/admin/create-user")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 18px",
+                borderRadius: "10px",
+                fontSize: "13px",
+                fontWeight: 500,
+                cursor: "pointer",
+                border: "1.5px solid #0e7490",
+                background: "white",
+                color: "#0e7490",
+              }}
+            >
+              👤 Create User
+            </button>
+
+            <button
+              onClick={() => setShowEmployeeModal(true)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 18px",
+                borderRadius: "10px",
+                fontSize: "13px",
+                fontWeight: 500,
+                cursor: "pointer",
+                border: "1.5px solid #0e7490",
+                background: "white",
+                color: "#0e7490",
+              }}
+            >
+              👥 Manage Employees
+            </button>
+          </div>
+
           {/* MAIN CONTENT */}
           <div
             style={{

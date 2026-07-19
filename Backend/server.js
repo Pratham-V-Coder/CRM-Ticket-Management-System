@@ -9,13 +9,14 @@ import userRouter from "./src/routers/userRouter.js";
 import newUserRouter from "./src/routers/newUserRouter.js";
 import ticketRouter from "./src/routers/ticketRouter.js";
 import tokensRouter from "./src/routers/tokensRouter.js";
+import categoryRouter from "./src/routers/categoryRoutes.js";
 import mongoose from "mongoose";
 
 const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5174",
     credentials: true,
   }),
 );
@@ -33,6 +34,7 @@ app.use("/v1/user", userRouter);
 app.use("/v1/new-user", newUserRouter);
 app.use("/v1/ticket", ticketRouter);
 app.use("/v1/tokens", tokensRouter);
+app.use("/v1/categories", categoryRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
