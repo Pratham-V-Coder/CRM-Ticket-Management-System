@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const rootUrl = "http://localhost:4000/v1/new-user/";
+const rootUrl = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/new-user/`
+  : "http://localhost:4000/v1/new-user/";
 
 const getAuthHeader = () => {
   const token =

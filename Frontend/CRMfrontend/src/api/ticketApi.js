@@ -4,7 +4,9 @@ import {
   openNewTicketPending,
 } from "../page/addTicketSlicer";
 
-const rootUrl = "http://localhost:4000/v1/";
+const rootUrl = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/`
+  : "http://localhost:4000/v1/";
 const ticketUrl = rootUrl + "ticket";
 const closeTicketUrl = rootUrl + "ticket/close-ticket/";
 

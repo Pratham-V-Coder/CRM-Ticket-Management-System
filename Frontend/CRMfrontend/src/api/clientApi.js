@@ -6,7 +6,9 @@ import { fetchNewAccessJWT } from "./userApi";
 // ==========================================
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:4000/v1/",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/`
+    : "http://localhost:4000/v1/",
   timeout: 10000,
 });
 
