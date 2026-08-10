@@ -42,9 +42,9 @@ function TicketPage() {
 
   if (!isLoading && !selectedTicket) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-700 mb-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-700 mb-4">
             Ticket Not Found
           </h2>
           <button
@@ -73,12 +73,12 @@ function TicketPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100 p-3 sm:p-6 md:p-8">
       {error && <Alert variant="danger">{error}</Alert>}
       {replyMsg && <Alert variant="success">{replyMsg}</Alert>}
       {replyTicketError && <Alert variant="danger">{replyTicketError}</Alert>}
 
-      <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-md p-8">
+      <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-md p-4 sm:p-6 md:p-8">
         {/* Breadcrumb */}
         <nav className="mb-6 text-sm">
           <span
@@ -92,14 +92,14 @@ function TicketPage() {
         </nav>
 
         {/* Header */}
-        <div className="flex justify-between items-start mb-6 border-b pb-4">
-          <div className="space-y-1">
-            <p className="text-sm">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6 border-b pb-4">
+          <div className="space-y-1 min-w-0 w-full sm:w-auto">
+            <p className="text-sm break-words">
               <span className="font-semibold text-gray-700">
                 Subject: {selectedTicket?.subject}
               </span>
             </p>
-            <p className="text-sm">
+            <p className="text-sm break-words">
               <span className="font-semibold text-gray-700">
                 Ticket Opened:{" "}
                 {selectedTicket?.openAt &&
@@ -124,7 +124,7 @@ function TicketPage() {
           {isEmployee && (
             <button
               onClick={() => dispatch(closeTicket(id))}
-              className="border-2 border-red-400 text-red-400 hover:bg-red-400 hover:text-white px-5 py-2 rounded-lg text-sm font-semibold transition duration-300 disabled:opacity-50"
+              className="border-2 border-red-400 text-red-400 hover:bg-red-400 hover:text-white px-5 py-2 rounded-lg text-sm font-semibold transition duration-300 disabled:opacity-50 w-full sm:w-auto whitespace-nowrap"
               disabled={selectedTicket?.status === "Closed"}
             >
               Close Ticket
@@ -133,7 +133,7 @@ function TicketPage() {
         </div>
 
         {/* Conversation Messages */}
-        <div className="space-y-4 mb-8 max-h-96 overflow-y-auto pr-2">
+        <div className="space-y-4 mb-8 max-h-80 sm:max-h-96 overflow-y-auto pr-1 sm:pr-2">
           {!selectedTicket?.conversation ||
           selectedTicket.conversation.length === 0 ? (
             <p className="text-center text-gray-400 text-sm py-8">
@@ -163,13 +163,13 @@ function TicketPage() {
                     className={`flex ${isEmployeeMsg ? "justify-end" : "justify-start"}`}
                   >
                     <div
-                      className={`rounded-2xl px-5 py-3 max-w-sm border shadow-sm ${
+                      className={`rounded-2xl px-4 sm:px-5 py-3 max-w-[85%] sm:max-w-sm border shadow-sm ${
                         isEmployeeMsg
                           ? "bg-cyan-500 text-white border-cyan-500" // ✅ Employee RIGHT cyan
                           : "bg-white text-gray-700 border-gray-200" // ✅ User LEFT white
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-line">
+                      <p className="text-sm whitespace-pre-line break-words">
                         {conv.message}
                       </p>
                     </div>
@@ -188,7 +188,7 @@ function TicketPage() {
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
-            <label className="block text-gray-700 font-semibold mb-2">
+            <label className="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">
               {isEmployee ? "Reply to User" : "Continue Conversation"}{" "}
               {/* ✅ Role se label */}
             </label>
@@ -206,7 +206,7 @@ function TicketPage() {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-2 rounded-lg text-sm font-semibold transition duration-300"
+                className="bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-2 rounded-lg text-sm font-semibold transition duration-300 w-full sm:w-auto"
               >
                 {isEmployee ? "Submit Reply" : "Send Message"}{" "}
                 {/* ✅ Role se button text */}
