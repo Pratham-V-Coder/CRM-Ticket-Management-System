@@ -1,21 +1,27 @@
 import React from "react";
-import team from "../assets/team.jpg";
+import team from "../assets/bg.jpg";
 
 const HelpSection = () => {
   return (
     <section
-      className="relative bg-cover bg-center h-96 flex items-center justify-center"
+      className="relative flex h-[400px] items-center bg-cover bg-center"
       style={{
-        backgroundImage: `url(${team})`, // <-- yahan backticks ke andar variable
+        backgroundImage: `url(${team})`,
       }}
     >
-      {/* Overlay for dark effect (optional) */}
-      <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/40"></div>
 
-      {/* Text Content */}
-      <h1 className="relative text-white text-3xl text-center z-10">
-        We are here to help you
-      </h1>
+      {/* Content */}
+      <div className="relative z-10 ml-10 md:ml-20">
+        <h1 className="!text-5xl !font-bold !text-olive-50 md:text-5xl">
+          We are here
+        </h1>
+
+        <h2 className="!ml-30 !text-4xl font-bold !text-olive-50 md:ml-16 md:text-5xl">
+          to help you..
+        </h2>
+      </div>
     </section>
   );
 };

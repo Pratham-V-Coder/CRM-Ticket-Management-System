@@ -19,338 +19,88 @@ function Dashboard() {
 
   const pendingTickets = tickets.filter((row) => row.status !== "Closed");
   const closedTickets = tickets.filter((row) => row.status === "Closed");
-  const urgentTickets = tickets.filter(
-    (row) => row.priority === "High" || row.priority === "Urgent",
-  );
   const totalTickets = tickets.length;
 
   return (
-    <div style={{ padding: "1.5rem", maxWidth: "1100px", margin: "0 auto" }}>
+    <div className="p-4 sm:p-6 max-w-[1100px] mx-auto my-3 sm:my-5">
       {/* HEADER */}
-      <div style={{ marginBottom: "1.5rem" }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          {/* Left - Greeting */}
-          <div>
-            <p style={{ fontSize: "13px", color: "#6b7280", margin: 0 }}>
-              Good morning 👋
-            </p>
-            <h2
-              style={{
-                fontSize: "20px",
-                fontWeight: 600,
-                margin: "2px 0 0",
-                color: "#111827",
-              }}
-            >
-              CRM Dashboard
-            </h2>
-          </div>
-
-          {/* Center - Search Bar */}
-          {/* Center - Search Bar */}
-          <div style={{ position: "relative", width: "350px" }}>
-            <span
-              style={{
-                position: "absolute",
-                left: "10px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                fontSize: "16px",
-                color: "#9ca3af",
-              }}
-            >
-              🔍
-            </span>
-            <input
-              type="text"
-              placeholder="Search by subject or status..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={(e) => {
-                e.target.style.border = "1.5px solid #0e7490";
-                e.target.style.boxShadow =
-                  "0 4px 12px rgba(14, 116, 144, 0.15)";
-              }}
-              onBlur={(e) => {
-                e.target.style.border = "1px solid #e5e7eb";
-                e.target.style.boxShadow = "none";
-              }}
-              style={{
-                width: "100%",
-                padding: "10px 12px 10px 34px",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
-                fontSize: "13px",
-                outline: "none",
-                color: "#111827",
-                boxSizing: "border-box",
-                transition: "border 0.2s, box-shadow 0.2s",
-              }}
-            />
-          </div>
-
-          {/* Right - Button */}
-          <button
-            onClick={() => navigate("/addticket")}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              background: "#0e7490",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              padding: "10px 18px",
-              fontSize: "14px",
-              fontWeight: 500,
-              cursor: "pointer",
-            }}
-          >
-            + Add New Ticket
-          </button>
+      <div className="mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        {/* Search Bar */}
+        <div className="relative w-full sm:w-[350px]">
+          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-base text-gray-400">
+            🔍
+          </span>
+          <input
+            type="text"
+            placeholder="Search by subject or status..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full py-2.5 pl-9 pr-3 border border-gray-200 rounded-lg text-sm text-gray-900 outline-none transition-shadow focus:border-cyan-700 focus:ring-2 focus:ring-cyan-700/20"
+          />
         </div>
+
+        {/* Add Ticket Button */}
+        <button
+          onClick={() => navigate("/addticket")}
+          className="flex items-center justify-center gap-1.5 bg-cyan-700 hover:bg-cyan-800 text-white rounded-lg px-4.5 py-2.5 text-sm font-medium transition-colors w-full sm:w-auto whitespace-nowrap"
+        >
+          + Add New Ticket
+        </button>
       </div>
 
       {/* STAT CARDS */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-          gap: "12px",
-          marginBottom: "1.5rem",
-        }}
-      >
+      <div className="grid gap-3 mb-6 grid-cols-1 xs:grid-cols-2 sm:grid-cols-3">
         {/* Total */}
-        <div
-          style={{
-            background: "white",
-            border: "1px solid #e5e7eb",
-            borderRadius: "12px",
-            padding: "1rem 1.25rem",
-          }}
-        >
-          <div
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "8px",
-              background: "#e0f2fe",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "20px",
-              marginBottom: "8px",
-            }}
-          >
+        <div className="bg-white border border-gray-200 rounded-xl p-4 sm:px-5">
+          <div className="w-10 h-10 rounded-lg bg-sky-100 flex items-center justify-center text-xl mb-2">
             🎫
           </div>
-          <p style={{ fontSize: "12px", color: "#6b7280", margin: "0 0 4px" }}>
-            Total Tickets
-          </p>
-          <p
-            style={{
-              fontSize: "28px",
-              fontWeight: 600,
-              margin: "0 0 6px",
-              color: "#111827",
-            }}
-          >
+          <p className="text-xs text-gray-500 mb-1">Total Tickets</p>
+          <p className="text-2xl sm:text-[28px] font-semibold text-gray-900 mb-1.5">
             {totalTickets}
           </p>
-          <span
-            style={{
-              fontSize: "11px",
-              padding: "3px 8px",
-              borderRadius: "20px",
-              background: "#e0f2fe",
-              color: "#0369a1",
-              fontWeight: 500,
-            }}
-          >
+          <span className="text-[11px] px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 font-medium">
             All time
           </span>
         </div>
 
         {/* Pending */}
-        <div
-          style={{
-            background: "white",
-            border: "1px solid #e5e7eb",
-            borderRadius: "12px",
-            padding: "1rem 1.25rem",
-          }}
-        >
-          <div
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "8px",
-              background: "#fef3c7",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "20px",
-              marginBottom: "8px",
-            }}
-          >
+        <div className="bg-white border border-gray-200 rounded-xl p-4 sm:px-5">
+          <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center text-xl mb-2">
             ⏳
           </div>
-          <p style={{ fontSize: "12px", color: "#6b7280", margin: "0 0 4px" }}>
-            Pending
-          </p>
-          <p
-            style={{
-              fontSize: "28px",
-              fontWeight: 600,
-              margin: "0 0 6px",
-              color: "#111827",
-            }}
-          >
+          <p className="text-xs text-gray-500 mb-1">Pending</p>
+          <p className="text-2xl sm:text-[28px] font-semibold text-gray-900 mb-1.5">
             {pendingTickets.length}
           </p>
-          <span
-            style={{
-              fontSize: "11px",
-              padding: "3px 8px",
-              borderRadius: "20px",
-              background: "#fef3c7",
-              color: "#b45309",
-              fontWeight: 500,
-            }}
-          >
+          <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">
             Open
           </span>
         </div>
 
         {/* Closed */}
-        <div
-          style={{
-            background: "white",
-            border: "1px solid #e5e7eb",
-            borderRadius: "12px",
-            padding: "1rem 1.25rem",
-          }}
-        >
-          <div
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "8px",
-              background: "#dcfce7",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "20px",
-              marginBottom: "8px",
-            }}
-          >
+        <div className="bg-white border border-gray-200 rounded-xl p-4 sm:px-5">
+          <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center text-xl mb-2">
             ✅
           </div>
-          <p style={{ fontSize: "12px", color: "#6b7280", margin: "0 0 4px" }}>
-            Closed
-          </p>
-          <p
-            style={{
-              fontSize: "28px",
-              fontWeight: 600,
-              margin: "0 0 6px",
-              color: "#111827",
-            }}
-          >
+          <p className="text-xs text-gray-500 mb-1">Closed</p>
+          <p className="text-2xl sm:text-[28px] font-semibold text-gray-900 mb-1.5">
             {closedTickets.length}
           </p>
-          <span
-            style={{
-              fontSize: "11px",
-              padding: "3px 8px",
-              borderRadius: "20px",
-              background: "#dcfce7",
-              color: "#15803d",
-              fontWeight: 500,
-            }}
-          >
+          <span className="text-[11px] px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-medium">
             Resolved
-          </span>
-        </div>
-
-        {/* Urgent */}
-        <div
-          style={{
-            background: "white",
-            border: "1px solid #e5e7eb",
-            borderRadius: "12px",
-            padding: "1rem 1.25rem",
-          }}
-        >
-          <div
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "8px",
-              background: "#fce7f3",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "20px",
-              marginBottom: "8px",
-            }}
-          >
-            🚨
-          </div>
-          <p style={{ fontSize: "12px", color: "#6b7280", margin: "0 0 4px" }}>
-            High Priority
-          </p>
-          <p
-            style={{
-              fontSize: "28px",
-              fontWeight: 600,
-              margin: "0 0 6px",
-              color: "#111827",
-            }}
-          >
-            {urgentTickets.length}
-          </p>
-          <span
-            style={{
-              fontSize: "11px",
-              padding: "3px 8px",
-              borderRadius: "20px",
-              background: "#fce7f3",
-              color: "#be185d",
-              fontWeight: 500,
-            }}
-          >
-            Urgent
           </span>
         </div>
       </div>
 
       {/* ALL TICKETS TABLE */}
-      <div
-        style={{
-          background: "white",
-          border: "1px solid #e5e7eb",
-          borderRadius: "12px",
-          padding: "1rem 1.25rem",
-        }}
-      >
-        <h3
-          style={{
-            fontSize: "15px",
-            fontWeight: 600,
-            margin: "0 0 1rem",
-            color: "#111827",
-          }}
-        >
+      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:px-5">
+        <h3 className="text-[15px] font-semibold text-gray-900 mb-4">
           All Tickets
         </h3>
-        <SecondDataTable searchQuery={searchQuery} />
+        <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+          <SecondDataTable searchQuery={searchQuery} />
+        </div>
       </div>
     </div>
   );
