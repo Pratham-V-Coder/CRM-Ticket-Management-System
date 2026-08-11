@@ -14,12 +14,21 @@ import mongoose from "mongoose";
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://crmticketmanagementsystem.vercel.app",
+  process.env.FRONTEND_URL, // optional extra origin via env var (e.g. preview deployments)
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://crmticketmanagementsystem-2vq6d2qxd.vercel.app",
-    ],
+    origin: (origin, callback) => {
+      // allow requests with no origin (curl, Postman, server-to-server)
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   }),
 );

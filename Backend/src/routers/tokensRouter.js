@@ -12,7 +12,14 @@ router.get("/new-access-jwt", async (req, res) => {
     return res.status(403).json({ message: "Forbidden" });
   }
 
-  const decoded = await verifyRefreshJWT(authorization).catch(() => null);
+  // ✅ FIX: strip "Bearer " prefix before verifying — jwt.verify() throws
+  // "jwt malformed" if given the raw "Bearer <token>" header, which meant
+  // this endpoint ALWAYS returned 403 in practice (refresh flow was broken).
+  const refreshToken = authorization.startsWith("Bearer ")
+    ? authorization.slice(7)
+    : authorization;
+
+  const decoded = await verifyRefreshJWT(refreshToken).catch(() => null);
 
   if (!decoded || !decoded.email) {
     return res.status(403).json({ message: "Forbidden" });
@@ -40,7 +47,8 @@ router.get("/new-access-jwt", async (req, res) => {
   );
   const today = new Date();
 
-  if (dbRefreshToken !== authorization) {
+  // ✅ FIX: compare against the stripped token, not the raw "Bearer ..." header
+  if (dbRefreshToken !== refreshToken) {
     return res.status(403).json({ message: "Forbidden" });
   }
 

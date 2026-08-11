@@ -1,8 +1,14 @@
 // src/routers/categoryRoutes.js
 import express from "express";
 import Category from "../models/admin/Category.js";
+import { adminAuthorization } from "../middleware/adminAuthorization.js";
 
 const router = express.Router();
+
+// ✅ FIX: these routes had NO auth check before — any visitor (even logged out)
+// could create/edit/delete categories via a direct API call. Locked down to
+// admin-only, since only AdminCategoryManager.jsx uses this API.
+router.use(adminAuthorization);
 
 router.get("/", async (req, res) => {
   try {

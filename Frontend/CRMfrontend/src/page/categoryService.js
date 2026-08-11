@@ -1,9 +1,8 @@
-// services/categoryService.js
-// Adjust BASE_URL to match your Express server
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/v1";
 
 function getAuthHeaders() {
-  const token = localStorage.getItem("admin_token"); // adjust key if needed
+  const token =
+    sessionStorage.getItem("accessJWT") || localStorage.getItem("accessJWT");
   return {
     "Content-Type": "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
