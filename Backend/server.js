@@ -16,7 +16,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://crmticketmanagementsystem-2vq6d2qxd.vercel.app",
+    ],
     credentials: true,
   }),
 );
