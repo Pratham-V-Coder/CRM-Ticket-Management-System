@@ -1,5 +1,7 @@
 import axios from "axios";
 
+console.log("BUILD TIME ENV CHECK:", import.meta.env.VITE_API_URL);
+
 const rootUrl = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL}/`
   : "http://localhost:4000/v1/";
@@ -29,7 +31,6 @@ export const userLogin = (formData) => {
       const res = await axios.post(loginUrl, formData);
 
       if (res.data.status === "success") {
-        // ✅ Dono jagah save karo
         sessionStorage.setItem("accessJWT", res.data.accessJWT);
         localStorage.setItem("accessJWT", res.data.accessJWT);
 
@@ -88,7 +89,6 @@ export const fetchNewAccessJWT = () => {
       });
 
       if (res.data.status === "success") {
-        // ✅ Dono jagah save karo
         sessionStorage.setItem("accessJWT", res.data.accessJWT);
         localStorage.setItem("accessJWT", res.data.accessJWT);
       }
@@ -125,7 +125,6 @@ export const adminLogin = (formData) => {
       const res = await axios.post(adminLoginUrl, formData);
 
       if (res.data.status === "success") {
-        // ✅ Dono jagah save karo
         sessionStorage.setItem("accessJWT", res.data.accessJWT);
         localStorage.setItem("accessJWT", res.data.accessJWT);
 
@@ -178,7 +177,6 @@ export const adminLogout = async () => {
   } catch (error) {
     console.log(error);
   } finally {
-    // ✅ Sab clean karo
     sessionStorage.removeItem("accessJWT");
     localStorage.removeItem("accessJWT");
     localStorage.removeItem("crmSite");
