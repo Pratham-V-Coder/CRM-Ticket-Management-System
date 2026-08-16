@@ -17,15 +17,6 @@ import { useNavigate } from "react-router-dom";
 
 import { getUserProfile } from "./userAction";
 
-/**
- * NOTE ON FONTS
- * This design uses "Poppins" for headings and "Inter" for body text.
- * Add this to your public/index.html <head> if not already present:
- *
- * <link rel="preconnect" href="https://fonts.googleapis.com">
- * <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
- */
-
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -118,13 +109,13 @@ function Login() {
   const error = isAdmin ? adminError : userError;
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#F5F3FB] p-4 sm:p-6 font-['Inter']">
-      <div className="w-full max-w-5xl bg-white rounded-[28px] shadow-[0_20px_60px_-15px_rgba(76,29,149,0.25)] overflow-hidden flex flex-col md:flex-row min-h-[640px]">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#F5F3FB] p-3 xs:p-4 sm:p-6 font-['Inter']">
+      <div className="w-full max-w-5xl bg-white rounded-2xl sm:rounded-[28px] shadow-[0_20px_60px_-15px_rgba(76,29,149,0.25)] overflow-hidden flex flex-col md:flex-row md:min-h-[640px]">
         {/* LEFT: FORM */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center px-8 sm:px-14 py-12">
+        <div className="w-full md:w-1/2 flex flex-col justify-center px-5 xs:px-6 sm:px-10 md:px-14 py-8 sm:py-12">
           {/* Logo */}
-          <div className="flex items-center gap-2 mb-10">
-            <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
+          <div className="flex items-center gap-2 mb-6 sm:mb-10">
+            <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center shrink-0">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M12 2L3 7v10l9 5 9-5V7l-9-5z"
@@ -143,19 +134,19 @@ function Login() {
           <p className="text-xs font-semibold tracking-[0.2em] text-violet-500 uppercase mb-2">
             Secure access
           </p>
-          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight mb-2 font-['Poppins']">
+          <h1 className="text-2xl xs:text-3xl sm:text-4xl font-bold text-slate-900 leading-tight mb-2 font-['Poppins']">
             Hello, Welcome Back
           </h1>
-          <p className="text-slate-500 mb-8">
+          <p className="text-sm sm:text-base text-slate-500 mb-6 sm:mb-8">
             Hey, welcome back to your special place
           </p>
 
           {/* Tabs — pill switch */}
-          <div className="inline-flex bg-violet-50 rounded-full p-1 mb-7 w-fit overflow-hidden">
+          <div className="inline-flex bg-violet-50 rounded-full p-1 mb-6 sm:mb-7 w-fit overflow-hidden">
             <button
               type="button"
               onClick={() => setActiveTab("employee")}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-200 ${
+              className={`px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-200 ${
                 activeTab === "employee"
                   ? "bg-violet-600 text-white shadow-sm"
                   : "text-slate-500 hover:text-slate-700"
@@ -166,7 +157,7 @@ function Login() {
             <button
               type="button"
               onClick={() => setActiveTab("admin")}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-200 ${
+              className={`px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-200 ${
                 activeTab === "admin"
                   ? "bg-violet-600 text-white shadow-sm"
                   : "text-slate-500 hover:text-slate-700"
@@ -250,7 +241,7 @@ function Login() {
               </button>
             </div>
 
-            <div className="flex items-center justify-between mb-7">
+            <div className="flex items-center justify-between mb-6 sm:mb-7">
               <label className="flex items-center gap-2 text-sm text-slate-500 cursor-pointer select-none">
                 <input
                   type="checkbox"
@@ -278,7 +269,7 @@ function Login() {
           </form>
         </div>
 
-        {/* RIGHT: SIGNATURE ILLUSTRATION PANEL */}
+        {/* RIGHT: SIGNATURE ILLUSTRATION PANEL — hidden below md, shown from md up */}
         <div className="hidden md:flex w-1/2 relative bg-gradient-to-br from-violet-700 via-violet-600 to-violet-400 items-center justify-center overflow-hidden">
           {/* soft cloud blobs */}
           <div className="absolute top-10 left-10 w-20 h-10 bg-white/20 rounded-full blur-[2px]" />
@@ -288,7 +279,7 @@ function Login() {
 
           <svg
             viewBox="0 0 320 360"
-            className="relative w-[280px] sm:w-[320px] drop-shadow-2xl"
+            className="relative w-[240px] lg:w-[280px] xl:w-[320px] drop-shadow-2xl"
           >
             {/* phone / access card */}
             <rect
