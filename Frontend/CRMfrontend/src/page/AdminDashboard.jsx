@@ -42,10 +42,26 @@ const CATEGORY_FILTER_OPTIONS = [
   { value: "other", label: "Other" },
 ];
 
+// 👇 NEW: simple hook to detect small screens
+const useIsMobile = (breakpoint = 768) => {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth <= breakpoint : false,
+  );
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= breakpoint);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [breakpoint]);
+
+  return isMobile;
+};
+
 const AdminDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { admin, isAuth } = useSelector((state) => state.admin);
+  const isMobile = useIsMobile(768); // 👈 NEW
 
   const [tickets, setTickets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +71,7 @@ const AdminDashboard = () => {
   const [reply, setReply] = useState("");
   const [replyMsg, setReplyMsg] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
-  const [categoryFilter, setCategoryFilter] = useState("all"); // ✅ new
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
 
   useEffect(() => {
@@ -64,12 +80,12 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     loadTickets();
-  }, [categoryFilter]); // ✅ reload when category filter changes
+  }, [categoryFilter]);
 
   const loadTickets = async () => {
     setIsLoading(true);
     try {
-      const result = await fetchAllTicketsAdmin(categoryFilter); // ✅ pass category
+      const result = await fetchAllTicketsAdmin(categoryFilter);
       if (result.status === "success") {
         setTickets(result.result || []);
       }
@@ -155,14 +171,20 @@ const AdminDashboard = () => {
     <>
       <div style={{ minHeight: "100vh", background: "#f3f4f6" }}>
         <div
-          style={{ padding: "1.5rem", maxWidth: "1200px", margin: "0 auto" }}
+          style={{
+            padding: isMobile ? "0.9rem" : "1.5rem", // 👈 responsive padding
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
         >
           {/* STAT CARDS */}
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-              gap: "12px",
+              gridTemplateColumns: isMobile
+                ? "repeat(3, 1fr)" // 👈 3 equal compact cards on mobile
+                : "repeat(auto-fit, minmax(140px, 1fr))",
+              gap: isMobile ? "8px" : "12px",
               marginBottom: "1.5rem",
             }}
           >
@@ -171,22 +193,29 @@ const AdminDashboard = () => {
                 background: "white",
                 border: "1px solid #e5e7eb",
                 borderRadius: "12px",
-                padding: "1rem 1.25rem",
+                padding: isMobile ? "0.6rem 0.5rem" : "1rem 1.25rem",
               }}
             >
-              <div style={{ fontSize: "20px", marginBottom: "8px" }}>🎫</div>
+              <div
+                style={{
+                  fontSize: isMobile ? "16px" : "20px",
+                  marginBottom: "6px",
+                }}
+              >
+                🎫
+              </div>
               <p
                 style={{
-                  fontSize: "12px",
+                  fontSize: isMobile ? "10px" : "12px",
                   color: "#6b7280",
                   margin: "0 0 4px",
                 }}
               >
-                Total Tickets
+                Total
               </p>
               <p
                 style={{
-                  fontSize: "28px",
+                  fontSize: isMobile ? "18px" : "28px",
                   fontWeight: 600,
                   margin: 0,
                   color: "#111827",
@@ -200,13 +229,20 @@ const AdminDashboard = () => {
                 background: "white",
                 border: "1px solid #e5e7eb",
                 borderRadius: "12px",
-                padding: "1rem 1.25rem",
+                padding: isMobile ? "0.6rem 0.5rem" : "1rem 1.25rem",
               }}
             >
-              <div style={{ fontSize: "20px", marginBottom: "8px" }}>⏳</div>
+              <div
+                style={{
+                  fontSize: isMobile ? "16px" : "20px",
+                  marginBottom: "6px",
+                }}
+              >
+                ⏳
+              </div>
               <p
                 style={{
-                  fontSize: "12px",
+                  fontSize: isMobile ? "10px" : "12px",
                   color: "#6b7280",
                   margin: "0 0 4px",
                 }}
@@ -215,7 +251,7 @@ const AdminDashboard = () => {
               </p>
               <p
                 style={{
-                  fontSize: "28px",
+                  fontSize: isMobile ? "18px" : "28px",
                   fontWeight: 600,
                   margin: 0,
                   color: "#f59e0b",
@@ -229,13 +265,20 @@ const AdminDashboard = () => {
                 background: "white",
                 border: "1px solid #e5e7eb",
                 borderRadius: "12px",
-                padding: "1rem 1.25rem",
+                padding: isMobile ? "0.6rem 0.5rem" : "1rem 1.25rem",
               }}
             >
-              <div style={{ fontSize: "20px", marginBottom: "8px" }}>✅</div>
+              <div
+                style={{
+                  fontSize: isMobile ? "16px" : "20px",
+                  marginBottom: "6px",
+                }}
+              >
+                ✅
+              </div>
               <p
                 style={{
-                  fontSize: "12px",
+                  fontSize: isMobile ? "10px" : "12px",
                   color: "#6b7280",
                   margin: "0 0 4px",
                 }}
@@ -244,7 +287,7 @@ const AdminDashboard = () => {
               </p>
               <p
                 style={{
-                  fontSize: "28px",
+                  fontSize: isMobile ? "18px" : "28px",
                   fontWeight: 600,
                   margin: 0,
                   color: "#10b981",
@@ -255,7 +298,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* STAT CARDS ke baad yeh add karo */}
+          {/* ACTION BUTTONS */}
           <div
             style={{
               display: "flex",
@@ -270,17 +313,19 @@ const AdminDashboard = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "8px 18px",
+                padding: isMobile ? "8px 12px" : "8px 18px",
                 borderRadius: "10px",
-                fontSize: "13px",
+                fontSize: isMobile ? "12px" : "13px",
                 fontWeight: 500,
                 cursor: "pointer",
                 border: "1.5px solid #0e7490",
                 background: "white",
                 color: "#0e7490",
+                flex: isMobile ? "1 1 auto" : "0 0 auto", // 👈 buttons share width on mobile
+                justifyContent: "center",
               }}
             >
-              🗂️ Manage Categories
+              🗂️ {isMobile ? "Categories" : "Manage Categories"}
             </button>
 
             <button
@@ -289,17 +334,19 @@ const AdminDashboard = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "8px 18px",
+                padding: isMobile ? "8px 12px" : "8px 18px",
                 borderRadius: "10px",
-                fontSize: "13px",
+                fontSize: isMobile ? "12px" : "13px",
                 fontWeight: 500,
                 cursor: "pointer",
                 border: "1.5px solid #0e7490",
                 background: "white",
                 color: "#0e7490",
+                flex: isMobile ? "1 1 auto" : "0 0 auto",
+                justifyContent: "center",
               }}
             >
-              👤 Create User
+              👤 {isMobile ? "User" : "Create User"}
             </button>
 
             <button
@@ -308,17 +355,19 @@ const AdminDashboard = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "8px 18px",
+                padding: isMobile ? "8px 12px" : "8px 18px",
                 borderRadius: "10px",
-                fontSize: "13px",
+                fontSize: isMobile ? "12px" : "13px",
                 fontWeight: 500,
                 cursor: "pointer",
                 border: "1.5px solid #0e7490",
                 background: "white",
                 color: "#0e7490",
+                flex: isMobile ? "1 1 auto" : "0 0 auto",
+                justifyContent: "center",
               }}
             >
-              👥 Manage Employees
+              👥 {isMobile ? "Employees" : "Manage Employees"}
             </button>
           </div>
 
@@ -326,260 +375,269 @@ const AdminDashboard = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: selectedTicket ? "1fr 1.5fr" : "1fr",
+              // 👇 KEY FIX: force single column on mobile regardless of selection
+              gridTemplateColumns: isMobile
+                ? "1fr"
+                : selectedTicket
+                  ? "1fr 1.5fr"
+                  : "1fr",
               gap: "16px",
             }}
           >
-            {/* TICKET LIST */}
-            <div
-              style={{
-                background: "white",
-                border: "1px solid #e5e7eb",
-                borderRadius: "12px",
-                padding: "1rem",
-              }}
-            >
-              {/* Search */}
-              <div style={{ position: "relative", marginBottom: "12px" }}>
-                <span
-                  style={{
-                    position: "absolute",
-                    left: "10px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: "#9ca3af",
-                  }}
-                >
-                  🔍
-                </span>
-                <input
-                  type="text"
-                  placeholder="Search tickets..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={(e) => {
-                    e.target.style.border = "1.5px solid #0e7490";
-                    e.target.style.boxShadow =
-                      "0 4px 12px rgba(14,116,144,0.15)";
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.border = "1px solid #e5e7eb";
-                    e.target.style.boxShadow = "none";
-                  }}
-                  style={{
-                    width: "100%",
-                    padding: "9px 12px 9px 32px",
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "8px",
-                    fontSize: "13px",
-                    outline: "none",
-                    boxSizing: "border-box",
-                  }}
-                />
-              </div>
-
-              {/* Category Filter Dropdown */}
-              <div style={{ marginBottom: "12px" }}>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: "11px",
-                    fontWeight: 500,
-                    color: "#6b7280",
-                    marginBottom: "4px",
-                  }}
-                >
-                  Filter by Category
-                </label>
-                <select
-                  value={categoryFilter}
-                  onChange={(e) => {
-                    setCategoryFilter(e.target.value);
-                    setSelectedTicket(null);
-                  }}
-                  style={{
-                    width: "100%",
-                    padding: "8px 10px",
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "8px",
-                    fontSize: "13px",
-                    outline: "none",
-                    boxSizing: "border-box",
-                    background: "white",
-                    color: "#111827",
-                  }}
-                >
-                  {CATEGORY_FILTER_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.value !== "all"
-                        ? `${CATEGORY_META[opt.value]?.icon || ""} ${opt.label}`
-                        : opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Filter Tabs */}
+            {/* TICKET LIST — hide when a ticket is open on mobile to avoid double-scroll */}
+            {(!isMobile || !selectedTicket) && (
               <div
                 style={{
-                  display: "flex",
-                  gap: "8px",
-                  marginBottom: "12px",
-                  flexWrap: "wrap",
+                  background: "white",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "12px",
+                  padding: isMobile ? "0.75rem" : "1rem",
                 }}
               >
-                {["All", "Open", "Closed", "Pending Operator response"].map(
-                  (f) => (
-                    <button
-                      key={f}
-                      onClick={() => setActiveFilter(f)}
-                      style={{
-                        padding: "4px 12px",
-                        borderRadius: "20px",
-                        fontSize: "11px",
-                        fontWeight: 500,
-                        cursor: "pointer",
-                        border: "1px solid #e5e7eb",
-                        background: activeFilter === f ? "#0e7490" : "white",
-                        color: activeFilter === f ? "white" : "#6b7280",
-                      }}
-                    >
-                      {f === "Pending Operator response" ? "Pending" : f}
-                    </button>
-                  ),
-                )}
-              </div>
+                {/* Search */}
+                <div style={{ position: "relative", marginBottom: "12px" }}>
+                  <span
+                    style={{
+                      position: "absolute",
+                      left: "10px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      color: "#9ca3af",
+                    }}
+                  >
+                    🔍
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="Search tickets..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={(e) => {
+                      e.target.style.border = "1.5px solid #0e7490";
+                      e.target.style.boxShadow =
+                        "0 4px 12px rgba(14,116,144,0.15)";
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.border = "1px solid #e5e7eb";
+                      e.target.style.boxShadow = "none";
+                    }}
+                    style={{
+                      width: "100%",
+                      padding: "9px 12px 9px 32px",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "8px",
+                      fontSize: "13px",
+                      outline: "none",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
 
-              {/* Tickets */}
-              {isLoading ? (
-                <p
+                {/* Category Filter Dropdown */}
+                <div style={{ marginBottom: "12px" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: "11px",
+                      fontWeight: 500,
+                      color: "#6b7280",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    Filter by Category
+                  </label>
+                  <select
+                    value={categoryFilter}
+                    onChange={(e) => {
+                      setCategoryFilter(e.target.value);
+                      setSelectedTicket(null);
+                    }}
+                    style={{
+                      width: "100%",
+                      padding: "8px 10px",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "8px",
+                      fontSize: "13px",
+                      outline: "none",
+                      boxSizing: "border-box",
+                      background: "white",
+                      color: "#111827",
+                    }}
+                  >
+                    {CATEGORY_FILTER_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.value !== "all"
+                          ? `${CATEGORY_META[opt.value]?.icon || ""} ${opt.label}`
+                          : opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Filter Tabs */}
+                <div
                   style={{
-                    textAlign: "center",
-                    color: "#9ca3af",
-                    padding: "2rem",
+                    display: "flex",
+                    gap: "8px",
+                    marginBottom: "12px",
+                    flexWrap: "wrap",
                   }}
                 >
-                  Loading...
-                </p>
-              ) : filteredTickets.length === 0 ? (
-                <p
-                  style={{
-                    textAlign: "center",
-                    color: "#9ca3af",
-                    padding: "2rem",
-                  }}
-                >
-                  No tickets found
-                </p>
-              ) : (
-                filteredTickets.map((ticket) => {
-                  const catMeta =
-                    CATEGORY_META[ticket.category] || CATEGORY_META.other;
-                  return (
-                    <div
-                      key={ticket._id}
-                      onClick={() => handleSelectTicket(ticket._id)}
-                      style={{
-                        padding: "12px",
-                        borderRadius: "8px",
-                        marginBottom: "8px",
-                        cursor: "pointer",
-                        border:
-                          selectedTicket?._id === ticket._id
-                            ? "1.5px solid #0e7490"
-                            : "1px solid #e5e7eb",
-                        background:
-                          selectedTicket?._id === ticket._id
-                            ? "#f0fdff"
-                            : "white",
-                      }}
-                    >
-                      <div
+                  {["All", "Open", "Closed", "Pending Operator response"].map(
+                    (f) => (
+                      <button
+                        key={f}
+                        onClick={() => setActiveFilter(f)}
                         style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
+                          padding: "4px 12px",
+                          borderRadius: "20px",
+                          fontSize: "11px",
+                          fontWeight: 500,
+                          cursor: "pointer",
+                          border: "1px solid #e5e7eb",
+                          background: activeFilter === f ? "#0e7490" : "white",
+                          color: activeFilter === f ? "white" : "#6b7280",
                         }}
                       >
-                        <p
+                        {f === "Pending Operator response" ? "Pending" : f}
+                      </button>
+                    ),
+                  )}
+                </div>
+
+                {/* Tickets */}
+                {isLoading ? (
+                  <p
+                    style={{
+                      textAlign: "center",
+                      color: "#9ca3af",
+                      padding: "2rem",
+                    }}
+                  >
+                    Loading...
+                  </p>
+                ) : filteredTickets.length === 0 ? (
+                  <p
+                    style={{
+                      textAlign: "center",
+                      color: "#9ca3af",
+                      padding: "2rem",
+                    }}
+                  >
+                    No tickets found
+                  </p>
+                ) : (
+                  filteredTickets.map((ticket) => {
+                    const catMeta =
+                      CATEGORY_META[ticket.category] || CATEGORY_META.other;
+                    return (
+                      <div
+                        key={ticket._id}
+                        onClick={() => handleSelectTicket(ticket._id)}
+                        style={{
+                          padding: "12px",
+                          borderRadius: "8px",
+                          marginBottom: "8px",
+                          cursor: "pointer",
+                          border:
+                            selectedTicket?._id === ticket._id
+                              ? "1.5px solid #0e7490"
+                              : "1px solid #e5e7eb",
+                          background:
+                            selectedTicket?._id === ticket._id
+                              ? "#f0fdff"
+                              : "white",
+                        }}
+                      >
+                        <div
                           style={{
-                            margin: 0,
-                            fontWeight: 500,
-                            fontSize: "13px",
-                            color: "#111827",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            flexWrap: "wrap", // 👈 prevents overflow on tiny screens
+                            gap: "6px",
                           }}
                         >
-                          {ticket.subject}
-                        </p>
+                          <p
+                            style={{
+                              margin: 0,
+                              fontWeight: 500,
+                              fontSize: "13px",
+                              color: "#111827",
+                            }}
+                          >
+                            {ticket.subject}
+                          </p>
+                          <span
+                            style={{
+                              fontSize: "10px",
+                              padding: "2px 8px",
+                              borderRadius: "20px",
+                              fontWeight: 500,
+                              background:
+                                ticket.status === "Closed"
+                                  ? "#dcfce7"
+                                  : "#fef3c7",
+                              color:
+                                ticket.status === "Closed"
+                                  ? "#15803d"
+                                  : "#b45309",
+                            }}
+                          >
+                            {ticket.status === "Closed" ? "Closed" : "Pending"}
+                          </span>
+                        </div>
+
+                        {/* Category badge */}
                         <span
                           style={{
+                            display: "inline-block",
+                            marginTop: "4px",
                             fontSize: "10px",
                             padding: "2px 8px",
                             borderRadius: "20px",
                             fontWeight: 500,
-                            background:
-                              ticket.status === "Closed"
-                                ? "#dcfce7"
-                                : "#fef3c7",
-                            color:
-                              ticket.status === "Closed"
-                                ? "#15803d"
-                                : "#b45309",
+                            background: "#ede9fe",
+                            color: "#6d28d9",
                           }}
                         >
-                          {ticket.status === "Closed" ? "Closed" : "Pending"}
+                          {catMeta.icon} {catMeta.label}
                         </span>
+
+                        <p
+                          style={{
+                            margin: "3px 0 0",
+                            fontSize: "11px",
+                            color: "#0e7490",
+                            fontWeight: 500,
+                          }}
+                        >
+                          👤 {ticket.clientId?.name || "Unknown User"}
+                        </p>
+                        <p
+                          style={{
+                            margin: "2px 0 0",
+                            fontSize: "11px",
+                            color: "#9ca3af",
+                          }}
+                        >
+                          {ticket.openAt
+                            ? new Date(ticket.openAt).toLocaleDateString(
+                                "en-IN",
+                                {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                },
+                              )
+                            : "N/A"}
+                        </p>
                       </div>
-
-                      {/* Category badge */}
-                      <span
-                        style={{
-                          display: "inline-block",
-                          marginTop: "4px",
-                          fontSize: "10px",
-                          padding: "2px 8px",
-                          borderRadius: "20px",
-                          fontWeight: 500,
-                          background: "#ede9fe",
-                          color: "#6d28d9",
-                        }}
-                      >
-                        {catMeta.icon} {catMeta.label}
-                      </span>
-
-                      <p
-                        style={{
-                          margin: "3px 0 0",
-                          fontSize: "11px",
-                          color: "#0e7490",
-                          fontWeight: 500,
-                        }}
-                      >
-                        👤 {ticket.clientId?.name || "Unknown User"}
-                      </p>
-                      <p
-                        style={{
-                          margin: "2px 0 0",
-                          fontSize: "11px",
-                          color: "#9ca3af",
-                        }}
-                      >
-                        {ticket.openAt
-                          ? new Date(ticket.openAt).toLocaleDateString(
-                              "en-IN",
-                              {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
-                              },
-                            )
-                          : "N/A"}
-                      </p>
-                    </div>
-                  );
-                })
-              )}
-            </div>
+                    );
+                  })
+                )}
+              </div>
+            )}
 
             {/* TICKET DETAIL */}
             {selectedTicket && (
@@ -588,14 +646,36 @@ const AdminDashboard = () => {
                   background: "white",
                   border: "1px solid #e5e7eb",
                   borderRadius: "12px",
-                  padding: "1.25rem",
+                  padding: isMobile ? "0.9rem" : "1.25rem",
                 }}
               >
+                {/* Back button on mobile since list is hidden */}
+                {isMobile && (
+                  <button
+                    onClick={() => setSelectedTicket(null)}
+                    style={{
+                      marginBottom: "10px",
+                      padding: "6px 12px",
+                      borderRadius: "8px",
+                      fontSize: "12px",
+                      fontWeight: 500,
+                      cursor: "pointer",
+                      border: "1px solid #e5e7eb",
+                      background: "#f9fafb",
+                      color: "#374151",
+                    }}
+                  >
+                    ← Back to list
+                  </button>
+                )}
+
                 <div
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "flex-start",
+                    flexWrap: "wrap", // 👈 wrap header on small screens
+                    gap: "10px",
                     marginBottom: "1rem",
                     paddingBottom: "1rem",
                     borderBottom: "1px solid #e5e7eb",
@@ -644,6 +724,7 @@ const AdminDashboard = () => {
                       style={{
                         display: "flex",
                         alignItems: "center",
+                        flexWrap: "wrap",
                         gap: "8px",
                         margin: "4px 0",
                       }}
@@ -692,7 +773,9 @@ const AdminDashboard = () => {
                       {selectedTicket.status}
                     </span>
                   </div>
-                  <div style={{ display: "flex", gap: "8px" }}>
+                  <div
+                    style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}
+                  >
                     <button
                       onClick={() => handleClose(selectedTicket._id)}
                       disabled={selectedTicket.status === "Closed"}
@@ -731,7 +814,7 @@ const AdminDashboard = () => {
                 {/* Conversation */}
                 <div
                   style={{
-                    maxHeight: "320px",
+                    maxHeight: isMobile ? "260px" : "320px",
                     overflowY: "auto",
                     marginBottom: "1rem",
                     paddingRight: "4px",
@@ -788,10 +871,11 @@ const AdminDashboard = () => {
                               style={{
                                 padding: "10px 14px",
                                 borderRadius: "12px",
-                                maxWidth: "75%",
+                                maxWidth: isMobile ? "88%" : "75%", // 👈 more width on small screens
                                 fontSize: "13px",
                                 background: isAdmin ? "#0e7490" : "#f3f4f6",
                                 color: isAdmin ? "white" : "#111827",
+                                wordBreak: "break-word", // 👈 prevents overflow of long text
                               }}
                             >
                               {conv.message}

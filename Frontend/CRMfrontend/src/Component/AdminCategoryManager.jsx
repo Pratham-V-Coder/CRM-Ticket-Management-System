@@ -266,7 +266,7 @@ export default function AdminCategoryManager() {
           onClick={() => setModal({ mode: "add" })}
           className="flex items-center gap-2 rounded-xl bg-cyan-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-600"
         >
-          <PlusIcon /> Add category
+          Add
         </button>
       </div>
 

@@ -23,6 +23,7 @@ import AdminCategoryManager from "./Component/AdminCategoryManager"; // ✅ naya
 
 import HelpSection from "./page/HelperSection";
 import CreateUser from "./page/CreateUser";
+import BackButton from "./Component/BackButton";
 
 const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/login" replace /> },
@@ -48,6 +49,7 @@ const router = createBrowserRouter([
       <PrivateRoute isAdmin={true}>
         <Navbar />
         <div className="pt-16">
+          <BackButton />
           <CreateUser />
           <Footer />
         </div>
@@ -60,6 +62,7 @@ const router = createBrowserRouter([
       <PrivateRoute roles={["employee"]}>
         <Navbar />
         <div className="pt-16">
+          <BackButton />
           <RaiseTicket />
           <Footer />
         </div>
@@ -72,6 +75,7 @@ const router = createBrowserRouter([
       <PrivateRoute roles={["employee"]}>
         <Navbar />
         <div className="pt-16">
+          <BackButton />
           <AddTicket />
           <Footer />
         </div>
@@ -84,6 +88,7 @@ const router = createBrowserRouter([
       <PrivateRoute roles={["employee"]}>
         <Navbar />
         <div className="pt-16">
+          <BackButton />
           <AddTicket />
           <Footer />
         </div>
@@ -96,6 +101,7 @@ const router = createBrowserRouter([
       <PrivateRoute roles={["employee"]}>
         <Navbar />
         <div className="pt-16">
+          <BackButton />
           <TicketListing />
           <Footer />
         </div>
@@ -108,6 +114,7 @@ const router = createBrowserRouter([
       <PrivateRoute roles={["employee"]}>
         <Navbar />
         <div className="pt-16">
+          <BackButton />
           <TicketPage />
           <Footer />
         </div>
@@ -133,6 +140,7 @@ const router = createBrowserRouter([
       <PrivateRoute isAdmin={true}>
         <Navbar />
         <div className="pt-16">
+          <BackButton />
           <AdminCategoryManager />
           <Footer />
         </div>
