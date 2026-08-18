@@ -6,9 +6,9 @@ const RaiseTicket = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white px-4 py-10 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-5xl">
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <PageBreadcrumb page="Raise a Ticket" />
-        </div>
+        </div> */}
 
         {/* Header */}
         <div className="mb-10 relative">

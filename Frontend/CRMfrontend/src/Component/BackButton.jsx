@@ -17,7 +17,7 @@ const BackButton = ({ label = "Back", fallback = "/" }) => {
   return (
     <button
       onClick={handleBack}
-      className="flex items-center gap-1.5 px-3.5 py-1.5 mb-3 rounded-lg text-[13px] font-medium cursor-pointer border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100 transition-colors"
+      className="flex items-center gap-1.5 px-3.5 py-1.5 mb-3 rounded-lg text-[13px] font-medium cursor-pointer border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100 transition-colors "
     >
       ← {label}
     </button>

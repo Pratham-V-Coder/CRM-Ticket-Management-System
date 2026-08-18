@@ -5,10 +5,8 @@ import { logoutUser } from "../page/userSlice";
 import { logout } from "../page/LoginSlice";
 import { adminLogoutThunk } from "../page/adminAction";
 import { userLogout } from "../api/userApi";
-import ManageEmployees from "../page/ManageEmployee";
 
 function Navbar() {
-  const [showEmployeeModal, setShowEmployeeModal] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -96,15 +94,6 @@ function Navbar() {
               </span>
             )}
 
-            {isAdmin && (
-              <button
-                onClick={() => setShowEmployeeModal(true)}
-                className="bg-cyan-600 hover:bg-cyan-700 px-3 py-1 rounded text-white font-semibold text-sm whitespace-nowrap"
-              >
-                👥 Manage Employees
-              </button>
-            )}
-
             <LogoutButton />
           </div>
 
@@ -166,26 +155,10 @@ function Navbar() {
               </Link>
             )}
 
-            {isAdmin && (
-              <button
-                onClick={() => {
-                  setShowEmployeeModal(true);
-                  setIsMenuOpen(false);
-                }}
-                className="w-full bg-cyan-600 hover:bg-cyan-700 px-3 py-2 rounded text-white font-semibold text-sm"
-              >
-                👥 Manage Employees
-              </button>
-            )}
-
             <LogoutButton full />
           </div>
         )}
       </div>
-
-      {showEmployeeModal && (
-        <ManageEmployees onClose={() => setShowEmployeeModal(false)} />
-      )}
     </nav>
   );
 }

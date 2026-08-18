@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { getNextSequence } from "../counter/counterModel.js";
 
 const TICKET_CATEGORIES = [
   "hardware",
@@ -16,6 +17,12 @@ const TICKET_CATEGORIES = [
 ];
 
 const ticketSchema = new Schema({
+  ticketId: {
+    type: Number,
+    unique: true,
+    required: true,
+    sparse: true,
+  },
   clientId: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -59,6 +66,17 @@ const ticketSchema = new Schema({
       },
     },
   ],
+});
+
+ticketSchema.pre("validate", async function (next) {
+  try {
+    if (this.isNew && (this.ticketId === undefined || this.ticketId === null)) {
+      this.ticketId = await getNextSequence("ticket");
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 export { TICKET_CATEGORIES };

@@ -79,6 +79,7 @@ function SecondDataTable({ searchQuery }) {
                       {item.status}
                     </span>
                   </td>
+                  {/* ✅ Date alag */}
                   <td className="px-6 py-3 text-sm text-gray-700">
                     {item.openAt
                       ? new Date(item.openAt).toLocaleDateString("en-IN", {
@@ -88,6 +89,7 @@ function SecondDataTable({ searchQuery }) {
                         })
                       : "N/A"}
                   </td>
+                  {/* ✅ Time alag */}
                   <td className="px-6 py-3 text-sm text-gray-700">
                     {item.openAt
                       ? new Date(item.openAt)
@@ -96,7 +98,7 @@ function SecondDataTable({ searchQuery }) {
                             minute: "2-digit",
                             hour12: true,
                           })
-                          .toUpperCase()
+                          .toUpperCase() // ✅ .toUpperCase() add kiya
                       : "N/A"}
                   </td>
                 </tr>

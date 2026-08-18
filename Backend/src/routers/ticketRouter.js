@@ -18,6 +18,7 @@ import {
   createNewTicketValidation,
   replyTicketMessageValidation,
 } from "../middleware/formValidationMiddleware.js";
+import { getNextSequence } from "../models/counter/counterModel.js";
 
 const router = express.Router();
 
@@ -38,7 +39,10 @@ router.post(
         ? category
         : "other";
 
+      const ticketId = await getNextSequence("ticket");
+
       const ticketObj = {
+        ticketId,
         clientId,
         subject,
         category: finalCategory,
@@ -49,6 +53,7 @@ router.post(
         return res.json({
           status: "success",
           message: "New ticket has been created",
+          ticketId: result.ticketId,
         });
       }
       res.json({

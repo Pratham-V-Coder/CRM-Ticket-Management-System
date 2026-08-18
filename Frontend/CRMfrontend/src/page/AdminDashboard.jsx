@@ -87,7 +87,11 @@ const AdminDashboard = () => {
     try {
       const result = await fetchAllTicketsAdmin(categoryFilter);
       if (result.status === "success") {
-        setTickets(result.result || []);
+        // Sabse recent ticket sabse top pe — openAt ke hisaab se descending sort
+        const sortedTickets = [...(result.result || [])].sort(
+          (a, b) => new Date(b.openAt) - new Date(a.openAt),
+        );
+        setTickets(sortedTickets);
       }
     } catch (err) {
       setError("Failed to load tickets");
@@ -158,14 +162,31 @@ const AdminDashboard = () => {
     const matchSearch =
       t.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       t.status?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchFilter =
-      activeFilter === "All" ? true : t.status === activeFilter;
+
+    // Status values backend me sirf "Closed" ya "Pending operator response" hoti hain,
+    // "Open" literal value kabhi bhi set nahi hoti — isliye "Open" ka matlab
+    // "jo Closed nahi hai" rakha hai. Baaki comparisons case-insensitive kiye
+    // taaki "Pending Operator response" vs "Pending operator response" wala
+    // mismatch bhi na ho.
+    let matchFilter = true;
+    if (activeFilter === "All") {
+      matchFilter = true;
+    } else if (activeFilter === "Open") {
+      matchFilter = t.status?.toLowerCase() !== "closed";
+    } else {
+      matchFilter = t.status?.toLowerCase() === activeFilter.toLowerCase();
+    }
+
     return matchSearch && matchFilter;
   });
 
   const totalTickets = tickets.length;
-  const closedTickets = tickets.filter((t) => t.status === "Closed").length;
-  const pendingTickets = tickets.filter((t) => t.status !== "Closed").length;
+  const closedTickets = tickets.filter(
+    (t) => t.status?.toLowerCase() === "closed",
+  ).length;
+  const pendingTickets = tickets.filter(
+    (t) => t.status?.toLowerCase() !== "closed",
+  ).length;
 
   return (
     <>
@@ -575,16 +596,18 @@ const AdminDashboard = () => {
                               borderRadius: "20px",
                               fontWeight: 500,
                               background:
-                                ticket.status === "Closed"
+                                ticket.status?.toLowerCase() === "closed"
                                   ? "#dcfce7"
                                   : "#fef3c7",
                               color:
-                                ticket.status === "Closed"
+                                ticket.status?.toLowerCase() === "closed"
                                   ? "#15803d"
                                   : "#b45309",
                             }}
                           >
-                            {ticket.status === "Closed" ? "Closed" : "Pending"}
+                            {ticket.status?.toLowerCase() === "closed"
+                              ? "Closed"
+                              : "Pending"}
                           </span>
                         </div>
 
@@ -761,11 +784,11 @@ const AdminDashboard = () => {
                         marginTop: "6px",
                         display: "inline-block",
                         background:
-                          selectedTicket.status === "Closed"
+                          selectedTicket.status?.toLowerCase() === "closed"
                             ? "#dcfce7"
                             : "#fef3c7",
                         color:
-                          selectedTicket.status === "Closed"
+                          selectedTicket.status?.toLowerCase() === "closed"
                             ? "#15803d"
                             : "#b45309",
                       }}
@@ -778,7 +801,9 @@ const AdminDashboard = () => {
                   >
                     <button
                       onClick={() => handleClose(selectedTicket._id)}
-                      disabled={selectedTicket.status === "Closed"}
+                      disabled={
+                        selectedTicket.status?.toLowerCase() === "closed"
+                      }
                       style={{
                         padding: "6px 14px",
                         borderRadius: "8px",
@@ -788,7 +813,10 @@ const AdminDashboard = () => {
                         border: "1.5px solid #ef4444",
                         background: "white",
                         color: "#ef4444",
-                        opacity: selectedTicket.status === "Closed" ? 0.5 : 1,
+                        opacity:
+                          selectedTicket.status?.toLowerCase() === "closed"
+                            ? 0.5
+                            : 1,
                       }}
                     >
                       Close Ticket
@@ -899,7 +927,7 @@ const AdminDashboard = () => {
                   </p>
                 )}
 
-                {selectedTicket.status === "Closed" ? (
+                {selectedTicket.status?.toLowerCase() === "closed" ? (
                   <p
                     style={{
                       textAlign: "center",
